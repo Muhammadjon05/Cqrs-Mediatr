@@ -1,4 +1,7 @@
+using Cqrs_Mediatr.Behaviour;
+using Cqrs_Mediatr.Commands;
 using Cqrs_Mediatr.Context;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<OrderDbContext>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddScoped<IPipelineBehavior<CreateOrderCommand, Guid>, CreateOrderCommandBehaviour>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
