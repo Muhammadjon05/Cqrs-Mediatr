@@ -1,4 +1,5 @@
 ﻿using Cqrs_Mediatr.Commands;
+using Cqrs_Mediatr.Exception;
 using Cqrs_Mediatr.Models;
 using Cqrs_Mediatr.Notifications;
 using Cqrs_Mediatr.Queries;
@@ -35,10 +36,9 @@ public class OrderController : ControllerBase
         {
             orderId = await _mediator.Send<Guid>(command);
         }
-        catch (Exception e)
+        catch (OrderProductIsNullException e)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(e.Message);
         }
         await _mediator.Publish(new OrderNotifications() { Id = orderId });
         return Ok(new {Id = orderId});
